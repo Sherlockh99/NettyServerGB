@@ -1,6 +1,7 @@
 package org.example.file.net.storage.netty;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufAllocator;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 
@@ -29,11 +30,7 @@ public class BasicHandler extends ChannelInboundHandlerAdapter {
 
         System.out.println(msg instanceof String);
         System.out.println(msg);
-
-
-        ByteBuf outBound = ctx.alloc().buffer();
-        outBound.writeBytes("OK".getBytes(StandardCharsets.UTF_8));
-        ctx.writeAndFlush(outBound);
+        ctx.writeAndFlush("OK\n");
     }
 
     @Override

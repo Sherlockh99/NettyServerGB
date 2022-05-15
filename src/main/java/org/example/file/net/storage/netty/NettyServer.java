@@ -11,7 +11,7 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 public class NettyServer {
     public static void main(String[] args) throws InterruptedException {
         /**
-        Создаем пулы потоков
+        * Создаем пулы потоков
         bossGroup   - поток, отвечающий за входящие соединения
         workerGroup - поток, отвечающий за конкректное соединение от клиента
          */
@@ -21,7 +21,7 @@ public class NettyServer {
             ServerBootstrap serverBootstrap = new ServerBootstrap(); // (2) //создаем NettyServer
 
             /**
-            Настраиваем ServerBootstrap:
+            * Настраиваем ServerBootstrap:
                 Два тренда:
                     bossGroup - входящие соединения (создает SocketChannel)
                     workerGroup - конкретное соединение (работает с SocketChannel, для обработки данных)
@@ -37,26 +37,28 @@ public class NettyServer {
                              */
 
                             /**
-                            * формируем трубопровод (массивы), в котором формируем данные
+                            * формируем трубопровод (массив), в котором формируем данные
                              */
                             socketChannel.pipeline()
-                                    .addLast(new ByteToStringDecoder(),
+                                    .addLast(
+                                            new ByteToStringDecoder(),
+                                            new ByteToStringEncoder(),
                                             new BasicHandler()
                             );
                         }
                     }); // (5) (6)
             /**
-            указываем, что наш NettyServer будет слушать порт 45001
+            * указываем, что наш NettyServer будет слушать порт 45001
             метод sync sync указывает на то, что мы хотим заблокироваться на этой строке
              */
             ChannelFuture channelFuture = serverBootstrap.bind(45001).sync(); //(7)
             /**
-            завершаем работу Netty
+            * завершаем работу Netty
              */
             channelFuture.channel().closeFuture().sync();
         }finally {
             /**
-            закрываем пулы потоков
+            * закрываем пулы потоков
             */
             workerGroup.shutdownGracefully();
             bossGroup.shutdownGracefully();
