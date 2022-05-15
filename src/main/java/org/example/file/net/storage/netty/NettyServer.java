@@ -40,7 +40,8 @@ public class NettyServer {
                             * формируем трубопровод (массивы), в котором формируем данные
                              */
                             socketChannel.pipeline()
-                                    .addLast(new BasicHandler()
+                                    .addLast(new ByteToStringDecoder(),
+                                            new BasicHandler()
                             );
                         }
                     }); // (5) (6)

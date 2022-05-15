@@ -26,12 +26,10 @@ public class BasicHandler extends ChannelInboundHandlerAdapter {
         /**
          * обрабатывает входные данные
          */
-        ByteBuf buffer = (ByteBuf) msg;
-        StringBuffer stringBuffer = new StringBuffer();
-        while (buffer.isReadable()){
-            stringBuffer.append((char) buffer.readByte());
-        }
-        System.out.println(stringBuffer);
+
+        System.out.println(msg instanceof String);
+        System.out.println(msg);
+
 
         ByteBuf outBound = ctx.alloc().buffer();
         outBound.writeBytes("OK".getBytes(StandardCharsets.UTF_8));
