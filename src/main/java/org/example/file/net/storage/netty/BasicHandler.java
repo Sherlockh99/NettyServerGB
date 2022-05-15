@@ -50,6 +50,7 @@ public class BasicHandler extends ChannelInboundHandlerAdapter {
         //Consumer<ChannelHandlerContext> channelHandlerContextConsumer = REQUEST_HANDLERS.get(request.getClass());
         channelHandlerContextConsumer.accept(ctx);
          */
+
         if(request instanceof AuthRequest){
             BasicResponse loginOkResponse = new BasicResponse("login ok");
             ctx.writeAndFlush(loginOkResponse);
