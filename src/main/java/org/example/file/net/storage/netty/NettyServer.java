@@ -7,8 +7,14 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.handler.codec.serialization.ClassResolver;
+import io.netty.handler.codec.serialization.ClassResolvers;
+import io.netty.handler.codec.serialization.ObjectDecoder;
+import io.netty.handler.codec.serialization.ObjectEncoder;
 
 public class NettyServer {
+
+    private static final int MAX_OBJECT_SIZE = 20*1_000_000;
     public static void main(String[] args) throws InterruptedException {
         /**
         * Создаем пулы потоков
@@ -41,6 +47,8 @@ public class NettyServer {
                              */
                             socketChannel.pipeline()
                                     .addLast(
+                                            new ObjectDecoder(MAX_OBJECT_SIZE, ClassResolvers.cacheDisabled(null)),
+                                            new ObjectEncoder(),
                                             new ByteToStringDecoder(),
                                             new ByteToStringEncoder(),
                                             new BasicHandler()
