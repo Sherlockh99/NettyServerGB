@@ -4,6 +4,8 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 
+import java.nio.charset.StandardCharsets;
+
 public class BasicHandler extends ChannelInboundHandlerAdapter {
 
     /**
@@ -30,6 +32,10 @@ public class BasicHandler extends ChannelInboundHandlerAdapter {
             stringBuffer.append((char) buffer.readByte());
         }
         System.out.println(stringBuffer);
+
+        ByteBuf outBound = ctx.alloc().buffer();
+        outBound.writeBytes("OK".getBytes(StandardCharsets.UTF_8));
+        ctx.writeAndFlush(outBound);
     }
 
     @Override
