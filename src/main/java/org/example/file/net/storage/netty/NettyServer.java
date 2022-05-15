@@ -11,10 +11,23 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 
 public class NettyServer {
     public static void main(String[] args) throws InterruptedException {
+        /*
+        Создаем пулы потоков
+        bossGroup   - поток, отвечающий за входящие соединения
+        workerGroup - поток, отвечающий за конкректное соединение от клиента
+         */
         EventLoopGroup bossGroup = new NioEventLoopGroup(); // (1)
         EventLoopGroup workerGroup = new NioEventLoopGroup();
         try{
-            ServerBootstrap serverBootstrap = new ServerBootstrap(); // (2)
+            ServerBootstrap serverBootstrap = new ServerBootstrap(); // (2) //создаем NettyServer
+
+            /*
+            Настраиваем ServerBootstrap:
+                Два тренда:
+                    bossGroup - входящие соединения (создает SocketChannel)
+                    workerGroup - конкретное соединение (работает с SocketChannel, для обработки данных)
+                    .channel - с помощью чего мы хотим работать (в данном случае с NioServerSocketChannel)
+             */
             serverBootstrap.group(bossGroup,workerGroup)
                     .channel(NioServerSocketChannel.class) // (3)
                     .childHandler(new ChannelInitializer<SocketChannel>() { // (4)
@@ -24,11 +37,21 @@ public class NettyServer {
                             pipeline.addLast();
                         }
                     }); // (5) (6)
-            ChannelFuture f = serverBootstrap.bind(45001).sync(); //(7)
-            f.channel().closeFuture().sync();
+            /*
+            указываем, что наш NettyServer будет слушать порт 45001
+            метод sync sync указывает на то, что мы хотим заблокироваться на этой строке
+             */
+            ChannelFuture channelFuture = serverBootstrap.bind(45001).sync(); //(7)
+            /*
+            завершаем работу Netty
+             */
+            channelFuture.channel().closeFuture().sync();
         }finally {
+            /*
+            закрываем пулы потоков
+            */
             workerGroup.shutdownGracefully();
-           bossGroup.shutdownGracefully();
+            bossGroup.shutdownGracefully();
         }
     }
 }
