@@ -1,11 +1,7 @@
 package org.example.file.net.storage.netty;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.ByteBufAllocator;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
-
-import java.nio.charset.StandardCharsets;
 
 public class BasicHandler extends ChannelInboundHandlerAdapter {
 
@@ -28,7 +24,6 @@ public class BasicHandler extends ChannelInboundHandlerAdapter {
          * обрабатывает входные данные
          */
 
-        System.out.println(msg instanceof String);
         System.out.println(msg);
         ctx.writeAndFlush("OK\n");
     }
